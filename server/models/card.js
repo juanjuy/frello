@@ -7,11 +7,11 @@ const CardSchema = new Schema({
     type: String,
     required: [true, 'The Card title is required']
   },
-  description: 'string',
-  labels: [{ type: 'string' }],
-  dueDate: 'date',
-  completed: 'boolean',
-  archived: 'boolean',
+  description: String,
+  labels: [String],
+  dueDate: Date,
+  completed: Boolean,
+  archived: Boolean,
   listId: {
     type: ObjectId,
     ref: 'List'
@@ -20,12 +20,12 @@ const CardSchema = new Schema({
     type: ObjectId,
     ref: 'Board'
   },
-  position: 'double',
-  comments: [{ type: 'string'}], //might need to change based on comment format
-  commentsCount: 'int64',
-  actions: [{type: string}]
+  position: Number,
+  comments: [String], //might need to change based on comment format
+  commentsCount: Number,
+  actions: [String]
 }, {timestamps: true})
 
-const Card = mongoose.model('Card', ListSchema);
+const Card = mongoose.model('Card', CardSchema);
 
 module.exports = Card;

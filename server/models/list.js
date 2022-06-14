@@ -11,7 +11,7 @@ const ListSchema = new Schema({
     type: ObjectId,
     ref: 'Board'
   },
-  position: 'double',
+  position: Number,
   cards: [{type: ObjectId, ref: 'Card'}]
 }, {timestamps: true})
 

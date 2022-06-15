@@ -31,6 +31,14 @@ const apiClient = {
       logError(e);
     }
   },
+  getSingleBoard: async (id) => {
+    try {
+      const { data } = await axios.get(routes.BOARD_ID_URL + id);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  }
 };
 
 export default apiClient;

@@ -1,14 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {useParams} from "react-router" 
+import { fetchSingleBoard } from "../features/boards/boards"
+import { useDispatch, useSelector } from 'react-redux';
 
-const Board = ({}) => {
+const Board = () => {
   const id = useParams().id
+  const dispatch = useDispatch();
+  const activeBoard = useSelector((state) => {
+    if (Array.isArray(state.boards)) {
+      return state.boards.filter(board => {
+        return board._id === id;
+      })
+    } else {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    dispatch(fetchSingleBoard(id));
+  }, [dispatch, id])
 
   return (
     <>
        <header>
         <ul>
-          <li id="title">My Title</li>
+          <li id="title">{activeBoard.title}</li>
           <li className="star-icon icon"></li>
           <li className="private private-icon icon">Private</li>
         </ul>

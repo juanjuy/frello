@@ -8,9 +8,10 @@ export const fetchBoards = createAsyncThunk("boards/fetchBoards", async () => {
   return data;
 });
 
-export const fetchSingleBoard = createAsyncThunk("boards/fetchSingleBoard", async () => {
-  const 
-}) 
+export const fetchSingleBoard = createAsyncThunk("boards/fetchSingleBoard", async (id) => {
+  const data = await apiClient.getSingleBoard(id);
+  return data;
+});
 
 export const createBoard = createAsyncThunk(
   "boards/createBoard",
@@ -35,9 +36,19 @@ const boardSlice = createSlice({
         return acc.concat(boardWithoutLists);
       }, []);
     }),
-      builder.addCase(createBoard.fulfilled, (state, action) => {
-        state.push(action.payload);
-      });
+    builder.addCase(createBoard.fulfilled, (state, action) => {
+      state.push(action.payload);
+    }),
+    builder.addCase(fetchSingleBoard.fulfilled, (state, action) => {
+      // if state is empty array, initialize it
+
+      return state.map(board => {
+        if (board._id === action.payload._id) {
+          return action.payload;
+        }
+        return board;
+      })
+    })
   },
 });
 

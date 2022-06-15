@@ -8,6 +8,10 @@ export const fetchBoards = createAsyncThunk("boards/fetchBoards", async () => {
   return data;
 });
 
+export const fetchSingleBoard = createAsyncThunk("boards/fetchSingleBoard", async () => {
+  const 
+}) 
+
 export const createBoard = createAsyncThunk(
   "boards/createBoard",
   async (newBoard, callback) => {

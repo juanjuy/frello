@@ -40,14 +40,11 @@ const boardSlice = createSlice({
       state.push(action.payload);
     }),
     builder.addCase(fetchSingleBoard.fulfilled, (state, action) => {
-      // if state is empty array, initialize it
-
-      return state.map(board => {
-        if (board._id === action.payload._id) {
-          return action.payload;
-        }
-        return board;
+      let filteredState = state.filter(board => {
+        return (board._id !== action.payload._id);
       })
+
+      return filteredState.concat(action.payload);
     })
   },
 });

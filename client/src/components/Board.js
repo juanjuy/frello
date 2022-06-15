@@ -6,23 +6,19 @@ import { useDispatch, useSelector } from 'react-redux';
 const Board = () => {
   const id = useParams().id
   const dispatch = useDispatch();
-  const activeBoard = useSelector((state) => {
-    if (Array.isArray(state.boards)) {
-      return state.boards.filter(board => {
-        return board._id === id;
-      })
-    } else {
-      return null;
-    }
-  });
+  const boards = useSelector((state) => state.boards)
+  const lists = useSelector((state) => state.lists);
+  const activeBoard = boards.filter(board => board._id === id)[0];
 
   useEffect(() => {
     dispatch(fetchSingleBoard(id));
+    // dispatch list state update here: fetchListforBoard(boardId)?
   }, [dispatch, id])
 
-  return (
-    <>
-       <header>
+  if (activeBoard) {
+    return (
+      <>
+        <header>
         <ul>
           <li id="title">{activeBoard.title}</li>
           <li className="star-icon icon"></li>
@@ -346,8 +342,11 @@ const Board = () => {
       </div>
       <div id="modal-container"></div>
       <div id="dropdown-container"></div>
-    </>
-  );
+      </>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default Board;

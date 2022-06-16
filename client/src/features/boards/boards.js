@@ -31,7 +31,7 @@ const boardSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchBoards.fulfilled, (state, action) => {
       return action.payload.reduce((acc, comm) => {
-        //eslint-disable-next-line
+        // eslint-disable-next-line
         const { lists, ...boardWithoutLists } = comm;
         return acc.concat(boardWithoutLists);
       }, []);
@@ -40,11 +40,13 @@ const boardSlice = createSlice({
       state.push(action.payload);
     }),
     builder.addCase(fetchSingleBoard.fulfilled, (state, action) => {
+      // eslint-disable-next-line
+      const { lists, ...boardWithoutLists } = action.payload
       let filteredState = state.filter(board => {
         return (board._id !== action.payload._id);
       })
 
-      return filteredState.concat(action.payload);
+      return filteredState.concat(boardWithoutLists);
     })
   },
 });

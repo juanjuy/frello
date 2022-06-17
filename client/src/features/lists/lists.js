@@ -16,6 +16,12 @@ export const addList = createAsyncThunk("lists/addList", async (list) => {
   return data;
 });
 
+export const editList = createAsyncThunk("lists/editList", async (arg) => {
+  const { fields, id } = arg;
+  const data = await apiClient.editList(fields, id);
+  return data;
+})
+
 const listSlice = createSlice({
   name: "lists",
   initialState,
@@ -37,6 +43,15 @@ const listSlice = createSlice({
     builder.addCase(addList.fulfilled, (state, action) => {
       return state.concat(action.payload);
     });
+
+    builder.addCase(editList.fulfilled, (state, action) => {
+      return state.map(list => {
+        if (list._id === action.payload._id) {
+          return action.payload;
+        }
+        return list;
+      })
+    })
   }
 });
 

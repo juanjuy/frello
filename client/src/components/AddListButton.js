@@ -21,7 +21,6 @@ export const AddListButton = () => {
   }
   return (
     <div id="new-list" className={creating ? 'new-list selected' : 'new-list'} onClick={() => setCreating(true)} >
-    {console.log('rendered', 'state', creating)}
     <span>Add a list...</span>
       <input type="text" placeholder="Add a list..." value={title} onChange={(e)=> setTitle(e.target.value)} />
       <div>

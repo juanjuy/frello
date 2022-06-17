@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from "./Card";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { editList } from '../features/lists/lists';
 
 export const List = ({ details }) => {
+  const dispatch = useDispatch();
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(details.title);
+
   const allCards = useSelector(state => state.cards);
   const currentCards = allCards.filter(card => card.listId === details._id);
+
+  const toggleEdit = () => {
+    setEditing(!editing);
+  }
+
+  const handleEditSubmit = () => {
+    if (title !== details.title) {
+      dispatch(editList({ fields: { title }, id: details._id }))
+      toggleEdit();
+    }
+  }
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      handleEditSubmit();
+    }
+  }
 
   return (
     <div className="list-wrapper">
@@ -12,7 +34,10 @@ export const List = ({ details }) => {
           <div className="list">
             <a className="more-icon sm-icon" href=""></a>
             <div>
-              <p className="list-title">{details.title}</p>
+              {editing ?
+              (<input className="list-title" type="text" autoFocus value={title} onChange={(e) => setTitle(e.target.value)} onBlur={handleEditSubmit} onKeyPress={handleEnter} />) :
+              (<p className="list-title" onClick={toggleEdit}>{details.title}</p>)
+              }
             </div>
             <div className="add-dropdown add-top">
               <div className="card"></div>

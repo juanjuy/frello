@@ -27,7 +27,7 @@ export const Card = ({ details }) => {
           </div>
         </div>
       </div>
-    </div>lkjalk
+    </div>
     <div className="add-dropdown add-bottom">
       <div className="card">
         <div className="card-info"></div>

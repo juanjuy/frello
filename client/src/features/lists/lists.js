@@ -11,8 +11,8 @@ const initialState = [];
   // double dispatch maybe? (within board component) 
     // can we handle two reducers with fetchSingleBoard?
 
-export const fetchList = createAsyncThunk("boards/fetchBoards", async () => {
-  const data = await apiClient.getBoards();
+export const addList = createAsyncThunk("lists/addList", async (list) => {
+  const data = await apiClient.addList(list);
   return data;
 });
 
@@ -32,6 +32,10 @@ const listSlice = createSlice({
         return list.boardId !== action.payload._id;
       })
       return filteredLists.concat(listsWithoutCards)
+    });
+
+    builder.addCase(addList.fulfilled, (state, action) => {
+      return state.concat(action.payload);
     });
   }
 });

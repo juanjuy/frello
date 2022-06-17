@@ -8,33 +8,58 @@ const HttpError = require("../models/httpError");
 // add list to the list collection - put request for the lists
 const createList = (req, res, next) => {
   const errors = validationResult(req);
-  console.log("REQ", req.body)
-  console.log(errors);
   let {boardId, list} = req.body;
   if (errors.isEmpty()) {
-    List.create({boardId, cards: [], position: 65535, ...list})
-      .then((list) => {
-        res.json({
-          title: list.title,
-          _id: list._id,
-          createdAt: list.createdAt,
-          updatedAt: list.updatedAt,
-          boardId: list.boardId,
-          position: list.position
-        });
-        return Board.findById(list.boardId)
-        // board is not properly concatenating the new list. 
-        // could it be that the 'list' variable is not in scope at this point?
-      }).then((board) => {
-        return Board.findByIdAndUpdate(list.boardId, { // is list in scope here? how do we access the new list?
-          lists: board.lists.concat(list._id)
-        }, { new: true })
-      }).catch((err) =>
-        next(new HttpError("Creating list failed, please try again", 500))
-      );
+    const addList = async () => {
+      let createdList = await List.create({boardId, cards: [], position: 65535, ...list});
+      let boardToBeUpdated = await Board.findById(createdList.boardId).exec();
+      Board.findByIdAndUpdate(boardToBeUpdated._id, { lists: boardToBeUpdated.lists.concat(createdList._id)}, { new: true }).exec();
+      res.status(201).json({
+        title: createdList.title,
+        _id: createdList._id,
+        createdAt: createdList.createdAt,
+        updatedAt: createdList.updatedAt,
+        boardId: createdList.boardId,
+        position: createdList.position
+      });
+    }
+    try {
+      addList();
+    } catch (err) {
+      next(new HttpError("Creating list failed, please try again", 500))
+    };
   } else {
     return next(new HttpError("The input field is empty.", 404));
   }
 };
 
+const editList = (req, res, next) => {
+  const errors = validationResult(req);
+  // console.log(errors);
+  let editedList = req.body;
+  console.log(editedList)
+  let listId = req.params.id;
+  if (errors.isEmpty()) {
+    try {
+      const updateList = async () => {
+        let updatedList = await List.findByIdAndUpdate(listId, editedList, { new: true }).exec();
+        res.status(200).json({
+          title: updatedList.title,
+          _id: updatedList._id,
+          createdAt: updatedList.createdAt,
+          updatedAt: updatedList.updatedAt,
+          boardId: updatedList.boardId,
+          position: updatedList.position
+        })
+      }
+      updateList();
+    } catch (err) {
+      next(new HttpError("Updating list failed, please try again", 500));
+    }
+  } else {
+    return next(new HttpError("The input field is empty.", 404));
+  }
+}
+
 exports.createList = createList;
+exports.editList = editList;

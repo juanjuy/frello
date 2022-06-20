@@ -17,8 +17,13 @@ export const addList = createAsyncThunk("lists/addList", async (list) => {
 });
 
 export const editList = createAsyncThunk("lists/editList", async (arg) => {
-  const { fields, id } = arg;
+  const { fields, id, callback } = arg;
   const data = await apiClient.editList(fields, id);
+  
+  if (callback) {
+    callback();
+  }
+
   return data;
 })
 

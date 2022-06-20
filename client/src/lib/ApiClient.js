@@ -54,7 +54,15 @@ const apiClient = {
     } catch (e) {
       logError(e);
     }
-  }
+  },
+  addCard: async (fields) => {
+    try {
+      const { data } = await axios.post(routes.ADD_CARD_URL, fields);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  }  
 };
 
 export default apiClient;

@@ -8,16 +8,11 @@ const Board = () => {
   const id = useParams().id
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.boards)
-  const lists = useSelector((state) => state.lists)
-  const cards = useSelector((state) => state.cards)
   const activeBoard = boards.filter(board => board._id === id)[0];
-
+  // console.log(boards)
   useEffect(() => {
     dispatch(fetchSingleBoard(id));
   }, [dispatch, id])
-  // console.log('Boards:', boards)
-  console.log('lists:', lists)
-  console.log('cards:', cards)
   if (!activeBoard) return null;
 
   return (

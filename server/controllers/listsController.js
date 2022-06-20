@@ -41,9 +41,7 @@ const editList = (req, res, next) => {
   if (errors.isEmpty()) {
     try {
       const updateList = async () => {
-        console.log("EDITED", editedList);
         let updatedList = await List.findByIdAndUpdate(listId, editedList, { new: true }).exec();
-        console.log("UPDATED", updatedList);
         res.status(200).json({
           title: updatedList.title,
           _id: updatedList._id,

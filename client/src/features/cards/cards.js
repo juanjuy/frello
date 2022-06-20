@@ -4,8 +4,12 @@ import apiClient from "../../lib/ApiClient";
 
 const initialState = [];
 
-export const fetchList = createAsyncThunk("boards/fetchBoards", async () => {
-  const data = await apiClient.getBoards();
+export const createCard = createAsyncThunk("cards/createCard", async (arg) => {
+  const { callback, ...fields } = arg;
+  const data = await apiClient.addCard(fields);
+  if (callback) {
+    callback();
+  }
   return data;
 });
 
@@ -25,6 +29,10 @@ const cardSlice = createSlice({
 
       return filteredCards;
     });
+
+    builder.addCase(createCard.fulfilled, (state, action) => {
+      return state.concat(action.payload);
+    })
   }
 });
 

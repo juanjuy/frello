@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import {useParams} from "react-router" 
 import { useSelector } from 'react-redux';
 import { List } from "./List"
 import { AddListButton } from "./AddListButton";
 
-export const ExistingLists = () => {
+export const ExistingLists = ({ boardId }) => {
   const [activeListId, setActiveListId] = useState('');
 
-  const id = useParams().id
   const allLists = useSelector((state) => state.lists)
   const currentLists = allLists.filter(list => {
-    return list.boardId === id
+    return list.boardId === boardId
   })
 
   return (

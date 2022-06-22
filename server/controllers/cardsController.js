@@ -33,5 +33,24 @@ const createCard = (req, res, next) => {
   }
 };
 
+const editCard = (req, res, next) => {
+  const errors = validationResult(req);
+  let editedCard = req.body;
+  let cardId = req.params.id;
+  if (errors.isEmpty()) {
+    try {
+      const updateCard = async () => {
+        let updatedCard = await Card.findByIdAndUpdate(cardId, editedCard, { new: true }).exec();
+        res.status(200).json(updatedCard)
+      }
+      updateCard();
+    } catch (err) {
+      next(new HttpError("Updating card failed, please try again", 500));
+    }
+  } else {
+    return next(new HttpError("The input field is empty.", 404));
+  }
+}
 exports.getCard = getCard;
 exports.createCard = createCard;
+exports.editCard = editCard;

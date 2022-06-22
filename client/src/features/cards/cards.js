@@ -18,6 +18,13 @@ export const getCard = createAsyncThunk("cards/getCard", async (id) => {
   return data;
 })
 
+export const editCard = createAsyncThunk("cards/editCard", async (arg) => {
+  const { id, ...fields } = arg;
+  console.log(id, fields);
+  const data = await apiClient.editCard(id, fields);
+  return data;
+})
+
 const cardSlice = createSlice({
   name: "cards",
   initialState,
@@ -43,6 +50,16 @@ const cardSlice = createSlice({
       let filteredState = state.filter(card => card._id !== action.payload._id);
 
       return filteredState.concat(action.payload);
+    });
+
+    builder.addCase(editCard.fulfilled, (state, action) => {
+      return state.map(card => {
+        if (card._id === action.payload._id) {
+          return action.payload;
+        }
+
+        return card;
+      });
     })
   }
 });

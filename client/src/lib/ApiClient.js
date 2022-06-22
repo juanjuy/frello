@@ -70,6 +70,15 @@ const apiClient = {
     } catch (e) {
       logError(e);
     }
+  },
+
+  editCard: async (id, fields) => {
+    try {
+      const { data } = await axios.put(routes.EDIT_CARD_URL + id, fields);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
   }
 };
 

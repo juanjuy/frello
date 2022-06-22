@@ -3,7 +3,8 @@ const router = express.Router();
 const boardsController = require("../controllers/boardsController");
 const listsController = require("../controllers/listsController");
 const cardsController = require("../controllers/cardsController");
-const { validateBoard, validateList, validateEditedList, validateCard } = require("../validators/validators");
+const commentsController = require("../controllers/commentsController");
+const { validateBoard, validateList, validateEditedList, validateCard, validateEditedCard, validateComment } = require("../validators/validators");
 
 router.get('/boards',boardsController.getBoards );
 
@@ -18,5 +19,9 @@ router.put('/lists/:id', validateEditedList, listsController.editList);
 router.get('/cards/:id', cardsController.getCard);
 
 router.post('/cards', validateCard, cardsController.createCard);
+
+router.put('/cards/:id', validateEditedCard, cardsController.editCard);
+
+router.post(`/comments`, validateComment, commentsController.createComment); 
 
 module.exports = router;

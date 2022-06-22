@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const Card = ({ details }) => {
   return (
     <div>
-      <div id="cards-container" data-id="list-1-cards">
+      <Link to={"/cards/" + details._id}>
+      <div id="cards-container" data-id="list-1-cards" >
       <div className="card-background">
-        <div className="card ">
+        <div className="card">
           <i className="edit-toggle edit-icon sm-icon"></i>
           <div className="card-info">
             {details.labels.map(label => {
@@ -28,6 +30,7 @@ export const Card = ({ details }) => {
         </div>
       </div>
     </div>
+    </Link>
   </div>
   )
 }

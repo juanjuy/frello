@@ -38,7 +38,7 @@ export const List = ({ details, activeListId, setActiveListId }) => {
   //   // setCreatingCard(!creatingCard);
   //   setNewCardTitle("");
   // }
-  
+
   const toggleEdit = () => {
     setEditing(!editing);
   }
@@ -74,11 +74,11 @@ export const List = ({ details, activeListId, setActiveListId }) => {
             {currentCards.map(card => {
               return (<Card key={card._id} details={card}/>)
             })
-            } 
-          <div className={ creatingCard ? "add-dropdown add-bottom active-card" : "add-dropdown add-bottom" }>
+            }
+          {creatingCard ? (<div className="add-dropdown add-bottom active-card">
             <div className="card">
               <div className="card-info"></div>
-              <textarea name="add-card" value={newCardTitle} onChange={(e)=> setNewCardTitle(e.target.value)}></textarea>
+              <textarea autoFocus name="add-card" value={newCardTitle} onChange={(e)=> setNewCardTitle(e.target.value)}></textarea>
               <div className="members"></div>
             </div>
             <a className="button" onClick={handleAddCard}>Add</a>
@@ -86,11 +86,11 @@ export const List = ({ details, activeListId, setActiveListId }) => {
             <div className="add-options">
               <span>...</span>
             </div>
-          </div>
-                
+          </div>) : null}
+
           <div className="add-card-toggle" data-position="bottom" onClick={openCreateCard}>
             Add a card...
-          </div>          
+          </div>
           </div>
         </div>
       </div>

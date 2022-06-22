@@ -5,14 +5,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ExistingLists } from "./ExistingLists";
 
 const Board = () => {
-  const id = useParams().id
+  // if /cards/id > wait for card to be populated. THEn get board id
+   // if useparam[0] == `board` do this, 
+  // else if 'cards' fetch card first, then fetch board
+  const path = useParams()["0"];
+  let id = useParams().id;
+  const cards = useSelector(state => state.cards)
   const dispatch = useDispatch();
   const boards = useSelector((state) => state.boards)
-  const activeBoard = boards.filter(board => board._id === id)[0];
-  // console.log(boards)
+  let currentCard;
+  let boardId;
+  if (path === "boards") {
+    boardId = id;
+  } else if (path === "cards") {
+    currentCard = cards.filter(card => card._id === id)[0]
+    if (currentCard) {
+      boardId = currentCard.boardId;
+    }
+  }
+  const activeBoard = boards.filter(board => board._id === boardId)[0];
+
   useEffect(() => {
-    dispatch(fetchSingleBoard(id));
-  }, [dispatch, id])
+    // if boardid
+    if (boardId) {
+      dispatch(fetchSingleBoard(boardId));
+    }
+    // else do nothing
+  }, [dispatch, boardId])
+
   if (!activeBoard) return null;
 
   return (
@@ -31,7 +51,7 @@ const Board = () => {
       </div>
     </header>
     <main>
-      <ExistingLists />
+      <ExistingLists boardId={boardId}/>
     </main>
     <div className="menu-sidebar">
       <div id="menu-main" className="main slide">

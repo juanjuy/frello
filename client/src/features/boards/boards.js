@@ -9,9 +9,14 @@ export const fetchBoards = createAsyncThunk("boards/fetchBoards", async () => {
 });
 
 export const fetchSingleBoard = createAsyncThunk("boards/fetchSingleBoard", async (id) => {
+  //option2 
+  // if activeBoard is true, then fetch single board (id);
+  // else fetchsingleboard(Card.getbyid(id).boardId)
   const data = await apiClient.getSingleBoard(id);
   return data;
 });
+
+// export const fetchSingleBoardByCardId
 
 export const createBoard = createAsyncThunk(
   "boards/createBoard",

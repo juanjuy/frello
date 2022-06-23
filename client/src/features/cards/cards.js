@@ -39,7 +39,13 @@ const cardSlice = createSlice({
         filteredCards = filteredCards.concat(list.cards);
       });
 
-      return filteredCards;
+      let cardsWithoutComments = filteredCards.map(card => {
+        // eslint-disable-next-line no-unused-vars
+        const { comments, ...cardWithoutComments } = card
+        return cardWithoutComments
+      })
+
+      return cardsWithoutComments;
     });
 
     builder.addCase(createCard.fulfilled, (state, action) => {

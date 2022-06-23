@@ -5,13 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ExistingLists } from "./ExistingLists";
 
 const Board = () => {
-  // if /cards/id > wait for card to be populated. THEn get board id
-   // if useparam[0] == `board` do this, 
-  // else if 'cards' fetch card first, then fetch board
   const path = useParams()["0"];
   let id = useParams().id;
-  const cards = useSelector(state => state.cards)
   const dispatch = useDispatch();
+  const cards = useSelector(state => state.cards)
   const boards = useSelector((state) => state.boards)
   let currentCard;
   let boardId;

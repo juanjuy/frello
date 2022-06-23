@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 export const Card = ({ details }) => {
+  let dueDate = moment(new Date(details.dueDate));
+  let stringDueDate = dueDate.format('MMM D');
+
   return (
     <div>
       <Link to={"/cards/" + details._id}>
@@ -21,11 +25,12 @@ export const Card = ({ details }) => {
             </p>
           </div>
           <div className="card-icons">
-            <i className="clock-icon sm-icon overdue-recent completed">
-              Aug 4
-            </i>
-            <i className="description-icon sm-icon"></i>
-            <i className="comment-icon sm-icon"></i>
+            {details.dueDate ? 
+            (<i className="clock-icon sm-icon overdue-recent completed">
+              {stringDueDate}
+            </i>) : null }
+            {details.description && (<i className="description-icon sm-icon"></i>)}
+            {/* {details.comments.length > 0 && (<i className="comment-icon sm-icon"></i>)} */}
           </div>
         </div>
       </div>

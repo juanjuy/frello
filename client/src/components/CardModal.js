@@ -2,19 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import { getCard, editCard } from '../features/cards/cards';
+import { getComments } from '../features/comments/comments';
 import { Label } from './Label';
 import LabelsPopover from './LabelsPopover';
 import CardEditingDescription from './CardEditingDescription';
+import DueDatePopover from './DueDatePopover';
 import moment from 'moment';
 
 export const CardModal = () => {
   const cardId = useParams().id;
   const allCards = useSelector(state => state.cards);
   const allLists = useSelector(state => state.lists);
+  const allComments = useSelector(state => state.comments);
   const currentCard = allCards.filter(card => card._id === cardId)[0]
   const currentList = allLists.filter(list => list._id === currentCard.listId)[0];
+  const currentComments = allComments.filter(comment => comment.cardId === cardId);
   const dispatch = useDispatch();
-  
+
   let dueDate = null;
   let stringDueDate;
   let daysUntilDue;
@@ -27,7 +31,9 @@ export const CardModal = () => {
   const [title, setTitle] = useState("");
   const [labelPopOver, setLabelPopOver] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
-  
+  const [editingDueDate, setEditingDueDate] = useState(false);
+  const [temporaryDescription, setTemporaryDescription] = useState("");
+
   const toggleLabelPopOver = () => {
     setLabelPopOver(!labelPopOver);
   }
@@ -35,15 +41,21 @@ export const CardModal = () => {
   const toggleEditingDescription = () => {
     setEditingDescription(!editingDescription);
   }
-  
+
+  const toggleEditingDueDate = () => {
+    setEditingDueDate(!editingDueDate);
+  }
+
   useEffect(() => {
     if (currentCard) {
       setTitle(currentCard.title)
+      setTemporaryDescription(currentCard.description);
     }
   }, [currentCard])
 
   if (!currentCard) {
     dispatch(getCard(cardId));
+    dispatch(getComments(cardId))
     return null;
   }
 
@@ -78,6 +90,11 @@ export const CardModal = () => {
     }
   }
 
+  const handleDueDateUpdate = (date) => {
+    submitEdit({ dueDate: date })
+    toggleEditingDueDate();
+  }
+
   return (
     <div id="modal-container">
       <div className="screen"></div>
@@ -110,7 +127,7 @@ export const CardModal = () => {
                   </li>
                 {currentCard.dueDate ? (<li className="due-date-section">
                   <h3>Due Date</h3>
-                  <div id="dueDateDisplay" className="overdue completed">
+                  <div id="dueDateDisplay" className="overdue completed" onClick={toggleEditingDueDate}>
                     <input
                       id="dueDateCheckbox"
                       type="checkbox"
@@ -120,22 +137,23 @@ export const CardModal = () => {
                     {stringDueDate} <span>{daysUntilDue < 0 ? '(past due)' : null }</span>
                   </div>
                 </li>) : null}
+                {editingDueDate && (<DueDatePopover toggleEditingDueDate={toggleEditingDueDate} currentDueDate={currentCard.dueDate || new Date()} onDueDateUpdate={handleDueDateUpdate} />)}
               </ul>
               <form className="description">
                 <p>Description</p>
-                {editingDescription ? <CardEditingDescription currentDescription={currentCard.description} onDescriptionUpdate={handleDescriptionUpdate} toggleEditingDescription={toggleEditingDescription}/> : 
+                {editingDescription ? <CardEditingDescription currentDescription={currentCard.description} tempDescription={temporaryDescription} setTemporaryDescription={setTemporaryDescription} onDescriptionUpdate={handleDescriptionUpdate} toggleEditingDescription={toggleEditingDescription}/> : 
                 (<><span id="description-edit" className="link" onClick={toggleEditingDescription}>
                   Edit
                 </span>
                 <p className="textarea-overlay">
                   {currentCard.description}
+                </p>
+                <p id="description-edit-options" className={temporaryDescription !== currentCard.description ? "" : "hidden"}>
+                  You have unsaved edits on this field.{" "}
+                  <span className="link" onClick={toggleEditingDescription}>View edits</span> -{" "}
+                  <span className="link" onClick={() => setTemporaryDescription(currentCard.description)}>Discard</span>
                 </p></>)
                 }
-                {/* <p id="description-edit-options" className="hidden">
-                  You have unsaved edits on this field.{" "}
-                  <span className="link">View edits</span> -{" "}
-                  <span className="link">Discard</span>
-                </p> */}
               </form>
             </li>
             <li className="comment-section">
@@ -174,6 +192,7 @@ export const CardModal = () => {
                 <li className="not-implemented">Show Details</li>
               </ul>
               <ul className="modal-activity-list">
+                {currentComments.map()}
                 <li>
                   <div className="member-container">
                     <div className="card-member">TP</div>
@@ -256,16 +275,16 @@ export const CardModal = () => {
         <aside className="modal-buttons">
           <h2>Add</h2>
           <ul>
-            <li className="member-button">
+            <li className="member-button not-implemented">
               <i className="person-icon sm-icon"></i>Members
             </li>
-            <li className="label-button">
+            <li className="label-button" onClick={toggleLabelPopOver}>
               <i className="label-icon sm-icon"></i>Labels
             </li>
-            <li className="checklist-button">
+            <li className="checklist-button not-implemented">
               <i className="checklist-icon sm-icon"></i>Checklist
             </li>
-            <li className="date-button not-implemented">
+            <li className="date-button" onClick={toggleEditingDueDate}>
               <i className="clock-icon sm-icon"></i>Due Date
             </li>
             <li className="attachment-button not-implemented">
@@ -274,22 +293,22 @@ export const CardModal = () => {
           </ul>
           <h2>Actions</h2>
           <ul>
-            <li className="move-button">
+            <li className="move-button not-implemented">
               <i className="forward-icon sm-icon"></i>Move
             </li>
-            <li className="copy-button">
+            <li className="copy-button not-implemented">
               <i className="card-icon sm-icon"></i>Copy
             </li>
-            <li className="subscribe-button">
+            <li className="subscribe-button not-implemented">
               <i className="sub-icon sm-icon"></i>Subscribe
               <i className="check-icon sm-icon"></i>
             </li>
             <hr />
-            <li className="archive-button">
+            <li className="archive-button not-implemented">
               <i className="file-icon sm-icon "></i>Archive
             </li>
           </ul>
-          <ul className="light-list">
+          <ul className="light-list not-implemented">
             <li className="not-implemented">Share and more...</li>
           </ul>
         </aside>

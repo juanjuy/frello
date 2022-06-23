@@ -10,7 +10,7 @@ router.get('/boards',boardsController.getBoards );
 
 router.get('/boards/:id', boardsController.getBoard)
 
-router.post('/boards', validateBoard, boardsController.createBoard );
+router.post('/boards', validateBoard, boardsController.createBoard);
 
 router.post('/lists', validateList, listsController.createList);
 
@@ -22,6 +22,8 @@ router.post('/cards', validateCard, cardsController.createCard);
 
 router.put('/cards/:id', validateEditedCard, cardsController.editCard);
 
-router.post(`/comments`, validateComment, commentsController.createComment); 
+router.post(`/comments`, validateComment, commentsController.createComment);
+
+router.get(`/cards/:id/comments`, commentsController.getComments);
 
 module.exports = router;

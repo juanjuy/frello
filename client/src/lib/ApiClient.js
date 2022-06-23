@@ -71,10 +71,17 @@ const apiClient = {
       logError(e);
     }
   },
-
   editCard: async (id, fields) => {
     try {
       const { data } = await axios.put(routes.EDIT_CARD_URL + id, fields);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  },
+  getComments: async (cardId) => {
+    try {
+      const { data } = await axios.get(routes.GET_COMMENTS_URL + cardId + '/comments');
       return data;
     } catch (e) {
       logError(e);

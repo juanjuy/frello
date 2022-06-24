@@ -19,9 +19,11 @@ export const getCard = createAsyncThunk("cards/getCard", async (id) => {
 })
 
 export const editCard = createAsyncThunk("cards/editCard", async (arg) => {
-  const { id, ...fields } = arg;
-  console.log(id, fields);
+  const { id, callback, ...fields } = arg;
   const data = await apiClient.editCard(id, fields);
+  if (callback) {
+    callback();
+  }
   return data;
 })
 

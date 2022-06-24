@@ -4,8 +4,8 @@ import apiClient from "../../lib/ApiClient";
 const initialState = [];
 
 export const createComment = createAsyncThunk("comments/createComment", async (arg) => {
-  const { callback, ...fields } = arg;
-  const data = await apiClient.addCard(fields);
+  const { callback, cardId, text } = arg;
+  const data = await apiClient.addComment(cardId, text);
   if (callback) {
     callback();
   }
@@ -23,7 +23,13 @@ const commentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getComments.fulfilled, (state, action) => {
-      return action.payload;
+      let currentCardId = action.payload[0]?.cardId;
+      let filteredComments = state.filter(comment => comment.cardId !== currentCardId);
+      return filteredComments.concat(action.payload);
+    })
+
+    builder.addCase(createComment.fulfilled, (state, action) => {
+      return state.concat(action.payload);
     })
   }
 });

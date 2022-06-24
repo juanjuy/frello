@@ -76,7 +76,7 @@ class DueDatePopover extends React.Component {
               </div>
               <div id="calendar-widget"></div>
             </div>
-            <button className="button" type="submit" onClick={() => this.props.onDueDateUpdate(this.picker)}>
+            <button className="button" type="submit" onClick={() => this.props.onDueDateUpdate(this.picker._d)}>
               Save
             </button>
             <button className="button red-button" type="reset" onClick={() => this.props.onDueDateUpdate(null)}>

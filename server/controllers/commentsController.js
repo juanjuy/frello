@@ -26,7 +26,7 @@ const createComment = (req, res, next) => {
     const addComment = async () => {
       let currentCard = await Card.findById(cardId).exec();
       let createdComment = await Comment.create({cardId, text: comment.text });
-      Card.findByIdAndUpdate(cardId, { comments: currentCard.comments.concat(createdComment._id)}, { new: true }).exec();
+      Card.findByIdAndUpdate(cardId, { comments: currentCard.comments.concat(createdComment._id), commentsCount: currentCard.comments.length + 1}, { new: true }).exec();
       res.status(201).json(createdComment);
     }
     try {

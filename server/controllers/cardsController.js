@@ -19,7 +19,7 @@ const createCard = (req, res, next) => {
   if (errors.isEmpty()) {
     const addCard = async () => {
       let currentList = await List.findById(listId).exec();
-      let createdCard = await Card.create({listId, boardId: currentList.boardId, position: 65535, ...card});
+      let createdCard = await Card.create({listId, boardId: currentList.boardId, commentsCount: 0, position: 65535, ...card});
       List.findByIdAndUpdate(listId, { cards: currentList.cards.concat(createdCard._id)}, { new: true }).exec();
       res.status(201).json(createdCard);
     }

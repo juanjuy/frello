@@ -7,3 +7,4 @@ export const ADD_CARD_URL = "/api/cards";
 export const GET_CARD_URL = "/api/cards/"
 export const EDIT_CARD_URL = "/api/cards/";
 export const GET_COMMENTS_URL = "/api/cards/";
+export const ADD_COMMENT_URL = "/api/comments";

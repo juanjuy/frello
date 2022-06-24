@@ -30,7 +30,7 @@ export const Card = ({ details }) => {
               {stringDueDate}
             </i>) : null }
             {details.description && (<i className="description-icon sm-icon"></i>)}
-            {/* {details.comments.length > 0 && (<i className="comment-icon sm-icon"></i>)} */}
+            {details.commentsCount > 0 && (<i className="comment-icon sm-icon"></i>)}
           </div>
         </div>
       </div>

@@ -1,6 +1,4 @@
 const Board = require("../models/board");
-const List = require("../models/list")
-const Card = require("../models/card");
 const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");
 
@@ -14,7 +12,7 @@ const getBoard = (req, res, next) => {
   // find board in mongo based on given id
   Board.findById(req.params.id).populate({
     path: 'lists',
-    populate: { path: 'cards'}
+    populate: { path: 'cards' }
   }).then((board) => {
     if (board === null) {
       return res.send("Board with that ID doesn't exist")

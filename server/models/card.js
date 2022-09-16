@@ -21,7 +21,7 @@ const CardSchema = new Schema({
     ref: 'Board'
   },
   position: Number,
-  comments: [String], //might need to change based on comment format
+  comments: [{ type: ObjectId, ref: 'Comment' }],
   commentsCount: Number,
   actions: [String]
 }, {timestamps: true})

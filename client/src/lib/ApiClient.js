@@ -31,6 +31,72 @@ const apiClient = {
       logError(e);
     }
   },
+  getSingleBoard: async (id) => {
+    try {
+      const { data } = await axios.get(routes.BOARD_ID_URL + id);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  },
+  addList: async(list) => {
+    try {
+      const { data } = await axios.post(routes.CREATE_LIST_URL, list);
+      return data
+    } catch (e) {
+      logError(e);
+    }
+  },
+  editList: async (fields, id) => {
+    try {
+      const { data } = await axios.put(routes.EDIT_LIST_URL + id, fields);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  },
+  addCard: async (fields) => {
+    try {
+      const { data } = await axios.post(routes.ADD_CARD_URL, fields);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  },
+  getCard: async (id) => {
+    try {
+      const { data } = await axios.get(routes.GET_CARD_URL + id);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  },
+  editCard: async (id, fields) => {
+    try {
+      const { data } = await axios.put(routes.EDIT_CARD_URL + id, fields);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  },
+  getComments: async (cardId) => {
+    try {
+      const { data } = await axios.get(routes.GET_COMMENTS_URL + cardId + '/comments');
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  },
+  addComment: async (cardId, text) => {
+    try {
+      console.log("CARD ID AND TEXT", cardId, text)
+      const { data } = await axios.post(routes.ADD_COMMENT_URL, { cardId, comment: { text } })
+      console.log("DATE", data);
+      return data;
+    } catch (e) {
+      logError(e);
+    }
+  }
 };
 
 export default apiClient;
